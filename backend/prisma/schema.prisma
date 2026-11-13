@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+}
+
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+}
+
+enum ComplaintStatus {
+  PENDING
+  RESOLVED
+}
+
+enum ComplaintCategory {
+  FOOD_QUALITY
+  HYGIENE
+  SERVICE
+  MENU
+  OTHER
+}
+
+model User {
+  id          String       @id @default(cuid())
+  name        String
+  email       String       @unique
+  password    String
+  role        Role         @default(STUDENT)
+  rollNumber  String?      @unique
+  createdAt   DateTime     @default(now())
+  attendances Attendance[]
+  feedbacks   Feedback[]
+  complaints  Complaint[]
+}
+
+model Menu {
+  id       String   @id @default(cuid())
+  date     DateTime
+  mealType MealType
+  items    String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([date, mealType])
+}
+
+model Attendance {
+  id       String   @id @default(cuid())
+  userId   String
+  date     DateTime
+  mealType MealType
+  status   String   @default("ATTENDED")
+  user     User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+
+  @@unique([userId, date, mealType])
+}
+
+model Feedback {
+  id       String   @id @default(cuid())
+  userId   String
+  mealType MealType
+  rating   Int
+  comment  String?
+  date     DateTime @default(now())
+  user     User     @relation(fields: [userId], references: [id])
+}
+
+model Complaint {
+  id          String            @id @default(cuid())
+  userId      String
+  category    ComplaintCategory
+  description String
+  status      ComplaintStatus   @default(PENDING)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  user        User              @relation(fields: [userId], references: [id])
+}
+
+model FoodWaste {
+  id         String   @id @default(cuid())
+  date       DateTime @unique
+  kilograms  Float
+  createdAt  DateTime @default(now())
+}
