@@ -8,7 +8,7 @@ import feedbackRoutes from './routes/feedback';
 import complaintRoutes from './routes/complaints';
 import wastageRoutes from './routes/wastage';
 import reportRoutes from './routes/reports';
-import './types/express.d';
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
