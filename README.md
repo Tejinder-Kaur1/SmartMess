@@ -101,7 +101,7 @@ Edit `.env` and set your database URL:
 
 ```env
 DATABASE_URL="postgresql://YOUR_USERNAME:YOUR_PASSWORD@localhost:5432/smartmess"
-JWT_SECRET="smartmess_super_secret_key_2024"
+JWT_SECRET="your_jwt_secret_here"
 PORT=5000
 ```
 
